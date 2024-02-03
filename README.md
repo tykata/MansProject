@@ -1,4 +1,4 @@
 # AfectivoWork
-A console-based task management application built with Spectre.Console. Allows users to manage their tasks from the command line.
+Aplikacja do zarządzania zadaniami w konsoli, zbudowana przy użyciu Spectre.Console. Umożliwia użytkownikom zarządzanie zadaniami za pomocą wiersza poleceń.
 
 ![image](https://raw.githubusercontent.com/tykata/MansProject/master/projekt.png)
