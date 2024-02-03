@@ -1,0 +1,89 @@
+ Architektura Aplikacji
+
+1. Modele Danych:
+
+   Employee:
+     - `EmployeeId` (int): Unikalny identyfikator pracownika.
+     - `Name` (nvarchar(100)): Imię pracownika.
+     - `LastName` (nvarchar(100)): Nazwisko pracownika.
+
+   Task:
+     - `TaskId` (int): Unikalny identyfikator zadania.
+     - `Name` (nvarchar(MAX)): Nazwa zadania.
+     - `EmployeeId` (int): Identyfikator pracownika, odniesienie do pracownika przypisanego do zadania.
+     - `Priority` (int): Priorytet zadania.
+     - `StartDate` (datetime): Data rozpoczęcia zadania.
+     - `DueDate` (datetime): Termin wykonania zadania.
+     - `IsCompleted` (bit): Flaga wskazująca, czy zadanie zostało zakończone.
+
+   Comment:
+     - `CommentId` (int): Unikalny identyfikator komentarza.
+     - `TaskId` (int): Identyfikator zadania, do którego przypisany jest komentarz.
+     - `Notes` (nvarchar(1000)): Notatki komentarza.
+     - `RecordStamp` (datetime): Znacznik czasu komentarza.
+
+   Meeting:
+     - `Topic` (nvarchar(MAX)): Temat spotkania.
+     - `Participants` (List<string>): Lista uczestników spotkania.
+     - `Location` (nvarchar(MAX)): Lokalizacja spotkania.
+     - `StartTime` (datetime): Data i godzina rozpoczęcia spotkania.
+     - `Duration` (timespan): Czas trwania spotkania.
+
+2. DbContext:
+
+   - `Efectivo`: Klasa dziedzicząca po `DbContext` reprezentująca kontekst bazy danych. Zawiera DbSet dla `Employee`, `Task`, i `Comment`.
+
+3. Interfejsy i Usługi:
+
+   ITaskManager:
+     - Interfejs definiujący operacje zarządzania zadaniami.
+
+   TaskManager:
+     - Implementacja `ITaskManager` zajmująca się zarządzaniem zadaniami.
+     - Zawiera listę zadań (`List<TaskEntity>`).
+     - Komunikuje się z bazą danych poprzez DbContext `Efectivo`.
+
+   NotificationService:
+     - Usługa zajmująca się wysyłaniem powiadomień.
+     - Komunikuje się z `ITaskManager` w celu uzyskania nadchodzących zadań i spotkań.
+
+   IApplication:
+     - Interfejs definiujący główną logikę aplikacji.
+
+   Application:
+     - Implementacja `IApplication` zajmująca się interakcją z użytkownikiem.
+     - Wykorzystuje `ITaskManager` i `NotificationService`.
+     - W obszarze metody `Run()` wczytuje, wyświetla zadania, spotkania, raporty i obsługuje wybory użytkownika.
+
+4. Konfiguracja:
+
+   - Konfiguracja DbContext w pliku `appsettings.json`.
+   - Konfiguracja DI za pomocą `ServiceCollection`.
+
+5. Pliki Konfiguracyjne:
+
+   - Plik konfiguracyjny `appsettings.json` zawierający ustawienia, takie jak połączenie do bazy danych.
+
+6. Baza Danych:
+
+   - Struktura bazy danych składająca się z tabel `Employee`, `Task`, `Comment`.
+
+Uruchamianie Aplikacji:
+
+1. Pliki kodu definiują struktury danych (`Entities`), modele (`Meeting`), DbContext (`Efectivo`), usługi (`ITaskManager`, `TaskManager`, `NotificationService`), interfejsy (`IApplication`), oraz logikę aplikacji (`Application`).
+  
+2. Pliki konfiguracyjne (`appsettings.json`) zawierają ustawienia, takie jak połączenie do bazy danych.
+
+3. Usługi są skonfigurowane za pomocą `ServiceCollection`.
+
+4. Aplikacja korzysta z `IApplication` do uruchomienia głównej logiki.
+
+5. Aplikacja interaktywnie obsługuje wybory użytkownika, wykorzystując `ITaskManager` i `NotificationService`.
+
+6. Baza danych przechowuje informacje o pracownikach, zadaniach, komentarzach oraz spotkaniach.
+
+Podsumowanie:
+
+Architektura aplikacji obejmuje warstwę danych, logikę biznesową oraz interfejs użytkownika. Struktura baz danych jest oparta na relacjach między pracownikami, zadaniami, komentarzami i spotkaniami. Usługi są skonfigurowane za pomocą DI, a pliki kon
+
+figuracyjne przechowują ustawienia aplikacji. Wszystko razem tworzy spójną aplikację do zarządzania zadaniami i komunikacji w zespole.
